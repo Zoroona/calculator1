@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب المرتب لأعضاء هيئة التدريس</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="شعار" class="logo">
+            <h1>مستحقات أعضاء هيئة التدريس للبرامج المدفوعة</h1>
+            <p>كشف تدقيق وكالة الدراسات العليا بعمادة الدراسات العليا والبحث العلمي</p>
+        </header>
+        
+        <form id="programForm" class="horizontal-form">
+            <div class="form-group">
+                <label for="college_name">اسم الكلية:</label>
+                <input type="text" id="college_name" name="college_name" required>
+            </div>
+            <div class="form-group">
+                <label for="program_name">اسم البرنامج:</label>
+                <input type="text" id="program_name" name="program_name" required>
+            </div>
+            <div class="form-group">
+                <label for="academic_year">العام الجامعي:</label>
+                <input type="text" id="academic_year" name="academic_year" required>
+            </div>
+            <div class="form-group">
+                <label for="semester">الفصل الدراسي:</label>
+                <input type="text" id="semester" name="semester" required>
+            </div>
+            <div class="form-group">
+                <label for="start_date">تاريخ بداية الفصل:</label>
+                <input type="date" id="start_date" name="start_date" required>
+            </div>
+            <div class="form-group">
+                <label for="end_date">تاريخ نهاية الفصل:</label>
+                <input type="date" id="end_date" name="end_date" required>
+            </div>
+            <div class="form-group">
+                <label for="total_students">اجمالي عدد الطلاب:</label>
+                <input type="number" id="total_students" name="total_students" required>
+            </div>
+            <div class="form-group">
+                <label for="term_hours">عدد ساعات الفصل:</label>
+                <input type="number" id="term_hours" name="term_hours" required>
+            </div>
+            <div class="form-group">
+                <label for="program_price">سعر البرنامج:</label>
+                <input type="number" id="program_price" name="program_price" required>
+            </div>
+            <div class="form-group">
+                <label for="total_price">السعر الإجمالي:</label>
+                <input type="number" id="total_price" name="total_price" readonly>
+            </div>
+            <div class="form-group">
+                <label for="university_percentage">نسبة الجامعة (%):</label>
+                <input type="number" id="university_percentage" name="university_percentage" required>
+            </div>
+            <div class="form-group">
+                <label for="remaining_price">المتبقي من سعر البرنامج:</label>
+                <input type="number" id="remaining_price" name="remaining_price" readonly>
+            </div>
+            <div class="form-group">
+                <label for="total_member_salary">إجمالي مستحقات الأعضاء:</label>
+                <input type="number" id="total_member_salary" name="total_member_salary" readonly>
+            </div>
+            <div class="form-group">
+                <label for="final_remaining_price">المتبقي بعد خصم المستحقات:</label>
+                <input type="number" id="final_remaining_price" name="final_remaining_price" readonly>
+            </div>
+        </form>
+<br>
+        <form id="salaryForm" class="horizontal-form" >
+            <div class="form-group">
+                <label for="name">اسم العضو:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="position">المرتبة العلمية:</label>
+                <select id="position" name="position" required>
+                    <option value="أستاذ">أستاذ</option>
+                    <option value="أستاذ مشارك">أستاذ مشارك</option>
+                    <option value="أستاذ مساعد">أستاذ مساعد</option>
+                    <option value="محاضر">محاضر</option>
+                    <option value="معيد">معيد</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="bs_hours">ساعات التدريس في البكالوريوس:</label>
+                <input type="number" id="bs_hours" name="bs_hours" min="0" >
+            </div>
+            <div class="form-group">
+                <label for="ms_hours">ساعات التدريس في الماجستير:</label>
+                <input type="number" id="ms_hours" name="ms_hours" min="0" max="6">
+            </div>
+            <div class="form-group">
+                <label for="other_hours">ساعات تدريس أخرى:</label>
+                <input type="number" id="other_hours" name="other_hours" min="0">
+            </div>
+            <div class="form-group">
+                <label for="total_hours">مجموع الساعات التدريسية:</label>
+                <input type="number" id="total_hours" name="total_hours" readonly>
+            </div>
+            <div class="form-group">
+                <label for="weeks">عدد الأسابيع:</label>
+                <input type="number" id="weeks" name="weeks" min="1" required>
+            </div>
+            <div class="form-group">
+                <label for="course_code">رمز المقرر:</label>
+                <input type="text" id="course_code" name="course_code">
+            </div>
+            <div class="form-group">
+                <label for="section_number">رقم الشعبة:</label>
+                <input type="number" id="section_number" name="section_number">
+            </div>
+            <div class="form-group">
+                <label for="students_number">عدد الطلاب في الشعبة:</label>
+                <input type="number" id="students_number" name="students_number">
+            </div>
+            <div class="form-group">
+                <label for="students_type">جنس الطلبة:</label>
+                <select id="students_type" name="students_type">
+                    <option value="طلاب">طلاب</option>
+                    <option value="طالبات">طالبات</option>
+                    <option value="مدمج">مدمج</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="students_level">مستوى الطلاب:</label>
+                <input type="text" id="students_level" name="students_level">
+            </div>
+            <div class="form-group">
+                <label for="notes">ملاحظات:</label>
+                <input type="text" id="notes" name="notes">
+            </div>
+            <div class="form-group">
+                <label for="admin_task">هل لديه تكليف إداري:</label>
+                <select id="admin_task" name="admin_task" required>
+                    <option value="yes">نعم</option>
+                    <option value="no">لا</option>
+                </select>
+            </div>
+            <div class="form-group button-group">
+                <button type="submit" id="addButton">إضافة</button>
+                <button type="button" id="backButton">رجوع</button>
+                <button type="button" id="printButton">طباعة</button>
+                <button type="button" id="clearButton">مسح الحقول</button>
+                <button type="button" id="saveButton">حفظ النتائج</button>
+                <button type="button" id="loadButton">تحميل بيانات</button>
+                <input type="file" id="fileInput" style="display: none;">
+            </div>
+        </form>
+        <div id="result" class="result-container"></div>
+    </div>
+
+    <footer>
+        <p>حقوق التصميم والبرمجة © 2024 من قبل [م.خالد جالي]</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
